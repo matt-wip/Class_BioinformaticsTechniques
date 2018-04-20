@@ -1,0 +1,33 @@
+#!/bin/bash
+
+#JOB SCRIPT
+
+#Set the name of the job. This will be the first part of the error/output filename.
+#$ -N bioinfo_final_project
+
+#Set the shell that should be used to run the job.
+#$ -S /bin/bash
+
+#Set the current working directory as the location for the error and output files.
+#(Will show up as .e and .o files)
+#$ -cwd
+
+#Select the queue to run in
+#$ -q DK
+
+#Select the number of slots the job will use
+#$ -pe smp 4
+
+#$ -j y -o /dev/null
+
+#Send e-mail at beginning/end/suspension of job
+#$ -m es
+
+#E-mail address to send to
+#$ -M matthew-wipfler@uiowa.edu
+
+# Run blast
+blastpath="/Shared/class-BME5320-dkristensen/"
+"${blastpath}bin/blastp" -db "${blastpath}database/refseq_protein" -out ./results/resSplit$SGE_TASK_ID -query ./assembly/splitFile$SGE_TASK_ID -outfmt "6 qseqid sseqid stitle mismatch evalue pident ppos" -num_alignments 60  -num_threads 4
+#"${blastpath}bin/blastp" -db "${blastpath}database/refseq_protein" -out ./results/resSplit$SGE_TASK_ID -query ./assembly/splitFile$SGE_TASK_ID -outfmt "6 qseqid sseqid stitle mismatch evalue pident ppos" -num_alignments 20
+
